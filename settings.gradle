@@ -1,3 +1,4 @@
 rootProject.name = 'schedule'
 include 'core'
+include 'infra'
 
