@@ -1,5 +1,6 @@
 package dev.devaz.infra.entity;
 
+import dev.devaz.schedule.core.domain.owner.Owner;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -94,5 +95,9 @@ public class OwnerEntity {
 
     public void setDateTimeUpdated(LocalDateTime dateTimeUpdated) {
         this.dateTimeUpdated = dateTimeUpdated;
+    }
+
+    public Owner convertToOwner() {
+        return new Owner(id, firstName, lastName, dateOfBirth, email, dateTimeCreated, dateTimeUpdated);
     }
 }

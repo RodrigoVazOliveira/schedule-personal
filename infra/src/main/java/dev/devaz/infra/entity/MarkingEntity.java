@@ -12,10 +12,10 @@ public class MarkingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private OwnerEntity owner;
 
-
+    @OneToMany(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Iterable<OwnerEntity> invites;
 
     @Column(nullable = false, length = 400)
@@ -35,6 +35,9 @@ public class MarkingEntity {
 
     @Column(name = "date_time_updated", nullable = false)
     private LocalDateTime dateTimeUpdated;
+
+    public MarkingEntity() {
+    }
 
     public MarkingEntity(Long id) {
         this.id = id;
