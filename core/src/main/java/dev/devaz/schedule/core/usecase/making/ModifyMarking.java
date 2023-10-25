@@ -1,6 +1,7 @@
 package dev.devaz.schedule.core.usecase.making;
 
 import dev.devaz.schedule.core.domain.marking.Marking;
+import dev.devaz.schedule.core.domain.marking.MarkingNotFoundException;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class ModifyMarking implements ModifyMarkingUseCase{
         if (!existsMarking) {
             LOGGER.warn("not found marking with information id {}", StructuredArguments.keyValue("idModifyMarking", idModifyMarking));
 
-            throw new RuntimeException("not found marking with id " + idModifyMarking);
+            throw new MarkingNotFoundException("not found marking with id " + idModifyMarking);
         }
 
         Marking markingUpdate = new Marking(idModifyMarking, marking.owner(), marking.invites(), marking.name(), marking.description(), marking.dateTimeInviteInitial(), marking.dateTimeInviteFinal(), null, LocalDateTime.now());
