@@ -1,8 +1,12 @@
 package dev.devaz.infra.entity;
 
+import dev.devaz.schedule.core.domain.marking.Marking;
+import dev.devaz.schedule.core.domain.owner.Owner;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "markings")
@@ -13,7 +17,7 @@ public class MarkingEntity {
     private Long id;
 
     @ManyToOne(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private OwnerEntity owner;
+    private OwnerEntity ownerEntity;
 
     @OneToMany(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Iterable<OwnerEntity> invites;
@@ -51,12 +55,12 @@ public class MarkingEntity {
         this.id = id;
     }
 
-    public OwnerEntity getOwner() {
-        return owner;
+    public OwnerEntity getOwnerEntity() {
+        return ownerEntity;
     }
 
-    public void setOwner(OwnerEntity owner) {
-        this.owner = owner;
+    public void setOwnerEntity(OwnerEntity ownerEntity) {
+        this.ownerEntity = ownerEntity;
     }
 
     public Iterable<OwnerEntity> getInvites() {
@@ -113,5 +117,37 @@ public class MarkingEntity {
 
     public void setDateTimeUpdated(LocalDateTime dateTimeUpdated) {
         this.dateTimeUpdated = dateTimeUpdated;
+    }
+
+    public Marking convertToMarking() {
+        List<Owner> owners = new ArrayList<>();
+        invites.forEach(invited -> owners.add(invited.convertToOwner()));
+
+        return new Marking(id, ownerEntity.convertToOwner(), owners, name, description, dateTimeInviteInitial, dateTimeInviteFinal, dateTimeCreated, dateTimeUpdated);
+    }
+
+    /**
+     * Convert marking to marking entity
+     *
+     * @param marking marking core
+     * @return MarkingEntity
+     */
+    public static MarkingEntity convertMarkingToMarkingEntity(final Marking marking) {
+        final OwnerEntity ownerEntity = OwnerEntity.convertOwnerToOwnerEntity(marking.owner());
+        List<OwnerEntity> ownerEntities = new ArrayList<>();
+        marking.invites().forEach(owner -> ownerEntities.add(OwnerEntity.convertOwnerToOwnerEntity(owner)));
+
+        MarkingEntity markingEntity = new MarkingEntity();
+        markingEntity.setOwnerEntity(ownerEntity);
+        markingEntity.setName(marking.name());
+        markingEntity.setDescription(marking.description());
+        markingEntity.setInvites(ownerEntities);
+        markingEntity.setDateTimeInviteInitial(marking.dateTimeInviteInitial());
+        markingEntity.setDateTimeInviteFinal(marking.dateTimeInviteFinal());
+        markingEntity.setDateTimeCreated(marking.dateTimeCreated());
+        markingEntity.setDateTimeUpdated(marking.dateTimeUpdated());
+
+
+        return markingEntity;
     }
 }

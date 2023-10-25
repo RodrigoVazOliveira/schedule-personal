@@ -1,4 +1,4 @@
-package dev.devaz.infra;
+package dev.devaz.infra.gateway;
 
 import dev.devaz.infra.entity.OwnerEntity;
 import dev.devaz.infra.repository.OwnerEntityRepository;
@@ -34,14 +34,7 @@ public class OwnerPersistence implements OwnerRepositoryUseCase {
     @Override
     public Owner save(Owner owner) {
         LOGGER.info("saving in database");
-        final OwnerEntity ownerEntity = new OwnerEntity();
-        ownerEntity.setFirstName(owner.firstName());
-        ownerEntity.setLastName(owner.lastName());
-        ownerEntity.setDateOfBirth(owner.dateOfBirth());
-        ownerEntity.setEmail(owner.email());
-        ownerEntity.setDateTimeCreated(owner.dateTimeCreated());
-        ownerEntity.setDateTimeUpdated(owner.dateTimeUpdated());
-
+        final OwnerEntity ownerEntity = OwnerEntity.convertOwnerToOwnerEntity(owner);
         final OwnerEntity ownerSaved = ownerEntityRepository.save(ownerEntity);
 
         return ownerSaved.convertToOwner();

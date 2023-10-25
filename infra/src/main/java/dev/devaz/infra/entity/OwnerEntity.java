@@ -97,7 +97,31 @@ public class OwnerEntity {
         this.dateTimeUpdated = dateTimeUpdated;
     }
 
+    /**
+     * convert to owner core
+     *
+     * @return Owner
+     */
     public Owner convertToOwner() {
         return new Owner(id, firstName, lastName, dateOfBirth, email, dateTimeCreated, dateTimeUpdated);
     }
+
+    /**
+     * convert owner to onwer entity
+     *
+     * @param owner owner is converted
+     * @return OwnerEntity
+     */
+    public static OwnerEntity convertOwnerToOwnerEntity(final Owner owner) {
+        final OwnerEntity ownerEntity = new OwnerEntity();
+        ownerEntity.setFirstName(owner.firstName());
+        ownerEntity.setLastName(owner.lastName());
+        ownerEntity.setDateOfBirth(owner.dateOfBirth());
+        ownerEntity.setEmail(owner.email());
+        ownerEntity.setDateTimeCreated(owner.dateTimeCreated());
+        ownerEntity.setDateTimeUpdated(owner.dateTimeUpdated());
+
+        return ownerEntity;
+    }
+
 }
