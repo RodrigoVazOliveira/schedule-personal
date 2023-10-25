@@ -18,19 +18,16 @@ public class ModifyMarking implements ModifyMarkingUseCase{
     @Override
     public Marking execute(Long idModifyMarking, Marking marking) {
         LOGGER.info("modifying marking by id {} {}", StructuredArguments.keyValue("idModifyMarking", idModifyMarking), StructuredArguments.keyValue("marking", marking));
-        notFoundMarkingByIdInformation(idModifyMarking);
-        Marking markingUpdate = new Marking(idModifyMarking, marking.owner(), marking.invites(), marking.name(), marking.description(), marking.dateTimeInviteInitial(), marking.dateTimeInviteFinal(), null, LocalDateTime.now());
-        markingRepositoryUseCase.save(marking);
-
-        return markingUpdate;
-    }
-
-    private void notFoundMarkingByIdInformation(Long idModifyMarking) {
         Boolean existsMarking = markingRepositoryUseCase.existsMarkingById(idModifyMarking);
         if (!existsMarking) {
             LOGGER.warn("not found marking with information id {}", StructuredArguments.keyValue("idModifyMarking", idModifyMarking));
 
             throw new RuntimeException("not found marking with id " + idModifyMarking);
         }
+
+        Marking markingUpdate = new Marking(idModifyMarking, marking.owner(), marking.invites(), marking.name(), marking.description(), marking.dateTimeInviteInitial(), marking.dateTimeInviteFinal(), null, LocalDateTime.now());
+        markingRepositoryUseCase.save(marking);
+
+        return markingUpdate;
     }
 }
