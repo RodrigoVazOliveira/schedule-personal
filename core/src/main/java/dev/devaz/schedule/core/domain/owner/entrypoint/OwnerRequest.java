@@ -20,11 +20,11 @@ import java.time.LocalDate;
 public record OwnerRequest(
 
         @NotBlank(message = "firstName deve ser preenchido")
-        @Size(message = "tamanho minimo deve ser 3 carateres e no máximo 400", min = 3, max = 150)
+        @Size(message = "tamanho minimo deve ser 3 carateres e no máximo 400", min = 3, max = 400)
         String firstName,
 
         @NotBlank(message = "lastName deve ser preenchido")
-        @Size(message = "tamanho minimo deve ser 3 carateres e no máximo 400", min = 3, max = 150)
+        @Size(message = "tamanho minimo deve ser 3 carateres e no máximo 400", min = 3, max = 400)
         String lastName,
 
         @NotNull(message = "dateOfBirth deve ser preenchido")

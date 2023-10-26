@@ -6,7 +6,6 @@ import java.util.Optional;
 
 /**
  * usecase for repository is the marking
- *
  */
 public interface MarkingRepositoryUseCase {
 
@@ -19,17 +18,17 @@ public interface MarkingRepositoryUseCase {
     Optional<Marking> getMerkingById(final Long id);
 
     /**
-     * verify is exists marking with id information
-     *
-     * @param id id for checking
-     * @return true - case exists or false case not found
-     */
-    Boolean existsMarkingById(final Long id);
-
-    /**
      * save marking
+     *
      * @param marking marking saved or update
      * @return marking with id
      */
     Marking save(final Marking marking);
+
+    /**
+     * get all markings
+     *
+     * @return Iterable<Owner>
+     */
+    Iterable<Marking> getAll();
 }

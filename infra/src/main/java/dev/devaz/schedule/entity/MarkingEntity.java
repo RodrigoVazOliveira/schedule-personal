@@ -2,6 +2,7 @@ package dev.devaz.schedule.entity;
 
 import dev.devaz.schedule.core.domain.marking.Marking;
 import dev.devaz.schedule.core.domain.owner.Owner;
+import dev.devaz.schedule.repository.OwnerEntityRepository;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,10 @@ public class MarkingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private OwnerEntity ownerEntity;
 
-    @OneToMany(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<OwnerEntity> invites;
 
     @Column(nullable = false, length = 400)
@@ -45,6 +46,32 @@ public class MarkingEntity {
 
     public MarkingEntity(Long id) {
         this.id = id;
+    }
+
+    /**
+     * Convert marking to marking entity
+     *
+     * @param ownerRepositoryUseCase
+     * @param marking                marking core
+     * @param ownerEntityRepository  repostory
+     * @return MarkingEntity
+     */
+    public static MarkingEntity convertMarkingToMarkingEntity(final Marking marking, OwnerEntityRepository ownerEntityRepository) {
+        final OwnerEntity ownerEntity = ownerEntityRepository.findById(marking.owner().id()).get();
+        List<OwnerEntity> ownerEntities = new ArrayList<>();
+        marking.invites().forEach(owner -> ownerEntities.add(ownerEntityRepository.findById(owner.id()).get()));
+
+        MarkingEntity markingEntity = new MarkingEntity();
+        markingEntity.setOwnerEntity(ownerEntity);
+        markingEntity.setName(marking.name());
+        markingEntity.setDescription(marking.description());
+        markingEntity.setInvites(ownerEntities);
+        markingEntity.setDateTimeInviteInitial(marking.dateTimeInviteInitial());
+        markingEntity.setDateTimeInviteFinal(marking.dateTimeInviteFinal());
+        markingEntity.setDateTimeCreated(marking.dateTimeCreated());
+        markingEntity.setDateTimeUpdated(marking.dateTimeUpdated());
+
+        return markingEntity;
     }
 
     public Long getId() {
@@ -126,28 +153,18 @@ public class MarkingEntity {
         return new Marking(id, ownerEntity.convertToOwner(), owners, name, description, dateTimeInviteInitial, dateTimeInviteFinal, dateTimeCreated, dateTimeUpdated);
     }
 
-    /**
-     * Convert marking to marking entity
-     *
-     * @param marking marking core
-     * @return MarkingEntity
-     */
-    public static MarkingEntity convertMarkingToMarkingEntity(final Marking marking) {
-        final OwnerEntity ownerEntity = OwnerEntity.convertOwnerToOwnerEntity(marking.owner());
-        List<OwnerEntity> ownerEntities = new ArrayList<>();
-        marking.invites().forEach(owner -> ownerEntities.add(OwnerEntity.convertOwnerToOwnerEntity(owner)));
-
-        MarkingEntity markingEntity = new MarkingEntity();
-        markingEntity.setOwnerEntity(ownerEntity);
-        markingEntity.setName(marking.name());
-        markingEntity.setDescription(marking.description());
-        markingEntity.setInvites(ownerEntities);
-        markingEntity.setDateTimeInviteInitial(marking.dateTimeInviteInitial());
-        markingEntity.setDateTimeInviteFinal(marking.dateTimeInviteFinal());
-        markingEntity.setDateTimeCreated(marking.dateTimeCreated());
-        markingEntity.setDateTimeUpdated(marking.dateTimeUpdated());
-
-
-        return markingEntity;
+    @Override
+    public String toString() {
+        return "MarkingEntity{" +
+                "id=" + id +
+                ", ownerEntity=" + ownerEntity +
+                ", invites=" + invites +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", dateTimeInviteInitial=" + dateTimeInviteInitial +
+                ", dateTimeInviteFinal=" + dateTimeInviteFinal +
+                ", dateTimeCreated=" + dateTimeCreated +
+                ", dateTimeUpdated=" + dateTimeUpdated +
+                '}';
     }
 }

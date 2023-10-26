@@ -1,7 +1,7 @@
 package dev.devaz.schedule.core.usecase.making;
 
 import dev.devaz.schedule.core.domain.marking.Marking;
-import dev.devaz.schedule.core.domain.marking.MarkingNotFoundException;
+import dev.devaz.schedule.core.domain.marking.exception.MarkingNotFoundException;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class ModifyMarking implements ModifyMarkingUseCase{
+public class ModifyMarking implements ModifyMarkingUseCase {
     private final static Logger LOGGER = LoggerFactory.getLogger(ModifyMarking.class);
     private final MarkingRepositoryUseCase markingRepositoryUseCase;
 
@@ -27,9 +27,9 @@ public class ModifyMarking implements ModifyMarkingUseCase{
             throw new MarkingNotFoundException("not found marking with id " + idModifyMarking);
         }
         final Marking oldMarking = markingOptional.get();
-
-        Marking markingUpdate = new Marking(idModifyMarking, marking.owner(), marking.invites(), marking.name(), marking.description(), marking.dateTimeInviteInitial(), marking.dateTimeInviteFinal(), oldMarking.dateTimeCreated(), LocalDateTime.now());
-        markingRepositoryUseCase.save(marking);
+        LOGGER.info("{}", StructuredArguments.keyValue("oldMarking", oldMarking));
+        Marking markingUpdate = new Marking(idModifyMarking, oldMarking.owner(), marking.invites(), marking.name(), marking.description(), marking.dateTimeInviteInitial(), marking.dateTimeInviteFinal(), oldMarking.dateTimeCreated(), LocalDateTime.now());
+        markingRepositoryUseCase.save(markingUpdate);
 
         return markingUpdate;
     }
