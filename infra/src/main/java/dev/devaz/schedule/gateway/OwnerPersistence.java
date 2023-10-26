@@ -1,9 +1,9 @@
-package dev.devaz.infra.gateway;
+package dev.devaz.schedule.gateway;
 
-import dev.devaz.infra.entity.OwnerEntity;
-import dev.devaz.infra.repository.OwnerEntityRepository;
 import dev.devaz.schedule.core.domain.owner.Owner;
 import dev.devaz.schedule.core.usecase.owner.OwnerRepositoryUseCase;
+import dev.devaz.schedule.entity.OwnerEntity;
+import dev.devaz.schedule.repository.OwnerEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -53,6 +53,12 @@ public class OwnerPersistence implements OwnerRepositoryUseCase {
         final OwnerEntity ownerEntity = optionalOwnerEntity.get();
 
         return Optional.of(ownerEntity.convertToOwner());
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        LOGGER.info("exists owner by email");
+        return ownerEntityRepository.existsByEmail(email);
     }
 
 }

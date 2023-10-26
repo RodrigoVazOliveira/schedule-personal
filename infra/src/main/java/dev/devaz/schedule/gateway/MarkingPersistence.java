@@ -1,7 +1,7 @@
-package dev.devaz.infra.gateway;
+package dev.devaz.schedule.gateway;
 
-import dev.devaz.infra.entity.MarkingEntity;
-import dev.devaz.infra.repository.MarkingEntityRepository;
+import dev.devaz.schedule.entity.MarkingEntity;
+import dev.devaz.schedule.repository.MarkingEntityRepository;
 import dev.devaz.schedule.core.domain.marking.Marking;
 import dev.devaz.schedule.core.usecase.making.MarkingRepositoryUseCase;
 import org.slf4j.Logger;

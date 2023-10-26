@@ -30,4 +30,12 @@ public interface OwnerRepositoryUseCase {
      * @return Optional<Owner>
      */
     Optional<Owner> getById(final Long id);
+
+    /**
+     * verify is exists owner with email
+     *
+     * @param email
+     * @return
+     */
+    Boolean existsByEmail(final String email);
 }

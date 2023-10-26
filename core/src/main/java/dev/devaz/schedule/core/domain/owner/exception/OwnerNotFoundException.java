@@ -1,4 +1,4 @@
-package dev.devaz.schedule.core.domain.owner;
+package dev.devaz.schedule.core.domain.owner.exception;
 
 /**
  * exception when not found owner

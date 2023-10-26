@@ -1,6 +1,7 @@
 package dev.devaz.schedule.core.usecase.owner;
 
 import dev.devaz.schedule.core.domain.owner.Owner;
+import dev.devaz.schedule.core.domain.owner.exception.OwnerWithEmailExistsException;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +19,21 @@ public class SaveOwner implements SaveOwnerUseCase {
     @Override
     public Owner execute(Owner owner) {
         LOGGER.info("saving owner {}", StructuredArguments.keyValue("owner", owner));
+        existsOwnerWithEmail(owner);
         final Owner ownerSave = new Owner(owner.id(), owner.firstName(), owner.lastName(), owner.dateOfBirth(), owner.email(), LocalDateTime.now(), LocalDateTime.now());
         final Owner ownerSaved = ownerRepositoryUseCase.save(ownerSave);
 
         LOGGER.info("owner saved {}", StructuredArguments.keyValue("id", ownerSaved.id()));
 
         return ownerSaved;
+    }
+
+    private void existsOwnerWithEmail(Owner owner) {
+        Boolean existsOwner = ownerRepositoryUseCase.existsByEmail(owner.email());
+        if (existsOwner) {
+            LOGGER.warn("already exists owner with email information");
+
+            throw new OwnerWithEmailExistsException("already exists owner with email information");
+        }
     }
 }

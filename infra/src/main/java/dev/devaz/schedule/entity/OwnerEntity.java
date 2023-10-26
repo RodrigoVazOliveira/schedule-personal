@@ -1,4 +1,4 @@
-package dev.devaz.infra.entity;
+package dev.devaz.schedule.entity;
 
 import dev.devaz.schedule.core.domain.owner.Owner;
 import jakarta.persistence.*;

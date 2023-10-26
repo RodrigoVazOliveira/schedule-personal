@@ -1,7 +1,7 @@
 package dev.devaz.schedule.core.usecase.owner;
 
 import dev.devaz.schedule.core.domain.owner.Owner;
-import dev.devaz.schedule.core.domain.owner.OwnerNotFoundException;
+import dev.devaz.schedule.core.domain.owner.exception.OwnerNotFoundException;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

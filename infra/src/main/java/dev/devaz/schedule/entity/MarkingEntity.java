@@ -1,4 +1,4 @@
-package dev.devaz.infra.entity;
+package dev.devaz.schedule.entity;
 
 import dev.devaz.schedule.core.domain.marking.Marking;
 import dev.devaz.schedule.core.domain.owner.Owner;
@@ -20,7 +20,7 @@ public class MarkingEntity {
     private OwnerEntity ownerEntity;
 
     @OneToMany(cascade = {CascadeType.MERGE,  CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private Iterable<OwnerEntity> invites;
+    private List<OwnerEntity> invites;
 
     @Column(nullable = false, length = 400)
     private String name;
@@ -67,7 +67,7 @@ public class MarkingEntity {
         return invites;
     }
 
-    public void setInvites(Iterable<OwnerEntity> invites) {
+    public void setInvites(List<OwnerEntity> invites) {
         this.invites = invites;
     }
 
