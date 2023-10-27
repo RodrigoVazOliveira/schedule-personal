@@ -4,6 +4,21 @@ API Rest para gerenciamento de agenda
 
 ---
 
+# Tecnologia:
+
+- Java 21
+- Spring Boot 3
+- H2
+- Spring Data JPA
+- Spring Validation
+- Spring openapidoc
+- PostgreSQL
+- Gradle 8.3
+- Arquitetura Clean Code
+- Projeto modularizado
+
+# ENDPOINTS:
+
 | METHOD | ENDPOINT          | DESCRIPTION                                  | PAYLOAD |
 |--------|-------------------|----------------------------------------------|---------|
 | POST   | /v1/owners        | cadastrar novo organizador                   | JSON    |
