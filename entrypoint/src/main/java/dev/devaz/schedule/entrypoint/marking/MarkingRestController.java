@@ -7,6 +7,8 @@ import dev.devaz.schedule.core.domain.owner.exception.OwnerWithEmailExistsExcept
 import dev.devaz.schedule.core.domain.validation.InputError;
 import dev.devaz.schedule.core.domain.validation.ResponseError;
 import dev.devaz.schedule.core.usecase.making.MarkingEntryPointUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +29,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/v1/markings")
 @Validated
-public class MarkingRestController {
+@Tag(name = "Controle de marcação de reunião", description = "Gerencia o controle marcação")
+class MarkingRestController {
     private final static Logger LOGGER = LoggerFactory.getLogger(MarkingRestController.class);
     private final MarkingEntryPointUseCase markingEntryPointUseCase;
 
@@ -36,6 +39,7 @@ public class MarkingRestController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(description = "Cadastrar uma nova marcação", summary = "Cadastrar uma nova marcação")
     ResponseEntity<Marking> save(@Valid @RequestBody MarkingRequest markingRequest, HttpServletRequest httpServletRequest) throws URISyntaxException {
         LOGGER.info("save new marking");
         Marking marking = markingRequest.convertToMarking();
@@ -46,6 +50,7 @@ public class MarkingRestController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(description = "Obtem todas as marcaçòes", summary = "Obtem todas as marcaçòes")
     ResponseEntity<Iterable<Marking>> getAll() {
         LOGGER.info("get all marking");
         Iterable<Marking> markings = markingEntryPointUseCase.getAll();
@@ -54,6 +59,7 @@ public class MarkingRestController {
     }
 
     @PatchMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(description = "Atualizar uma marcação por id", summary = "Atualizar uma marcação por id")
     ResponseEntity<Marking> updatePartialMarking(@NotNull(message = "id deve ser informado") @PathVariable("id") Long idMarking, @Valid @RequestBody MarkingRequest markingRequest) {
         LOGGER.info("updating partial marking");
         final Marking marking = markingRequest.convertToMarking();

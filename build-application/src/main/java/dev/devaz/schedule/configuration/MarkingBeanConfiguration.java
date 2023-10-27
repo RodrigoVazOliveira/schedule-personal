@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MarkingBeanConfiguration {
+class MarkingBeanConfiguration {
 
     @Bean
     ModifyMarking getModifyMarking(MarkingRepositoryUseCase markingRepositoryUseCase) {

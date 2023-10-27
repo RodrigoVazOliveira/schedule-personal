@@ -7,6 +7,8 @@ import dev.devaz.schedule.core.domain.owner.exception.OwnerWithEmailExistsExcept
 import dev.devaz.schedule.core.domain.validation.InputError;
 import dev.devaz.schedule.core.domain.validation.ResponseError;
 import dev.devaz.schedule.core.usecase.owner.OwnerEntryPointUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +30,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/v1/owners")
 @Validated
-public class OwnerRestController {
+@Tag(name = "Organizador", description = "controle de organizadores/convidados")
+class OwnerRestController {
     private final static Logger LOGGER = LoggerFactory.getLogger(OwnerRestController.class);
     private final OwnerEntryPointUseCase ownerEntryPointUseCase;
 
@@ -37,6 +40,7 @@ public class OwnerRestController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(description = "criar um novo organizador", summary = "criar um novo organizador")
     ResponseEntity<Owner> saveNewOwner(@Valid @RequestBody OwnerRequest ownerRequest, HttpServletRequest httpServletRequest) throws URISyntaxException {
         LOGGER.info("saving owner. {}", StructuredArguments.keyValue("ownerRequest", ownerRequest));
         final Owner owner = ownerEntryPointUseCase.saveNewOwner(ownerRequest.convertToOwner());
@@ -46,6 +50,7 @@ public class OwnerRestController {
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(description = "Obtem um organizador pelo id", summary = "Obtem um organizador pelo id")
     ResponseEntity<Owner> getOwnerById(@NotNull(message = "deve informar o id na path url") @PathVariable final Long id) {
         LOGGER.info("getting owner by id. {}", StructuredArguments.keyValue("id", id));
         final Owner owner = ownerEntryPointUseCase.getOwnerById(id);
@@ -54,6 +59,7 @@ public class OwnerRestController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(description = "Obtem lista com todos organizadores cadastros", summary = "Obtem lista com todos organizadores cadastros")
     ResponseEntity<Iterable<Owner>> getAllOwners() {
         LOGGER.info("get all owners");
         Iterable<Owner> owners = ownerEntryPointUseCase.getAllOwners();
